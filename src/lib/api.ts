@@ -74,7 +74,9 @@ export interface AuditLog {
   created_at: string;
 }
 
-const BASE = '/api/v1';
+// In dev, Vite proxies /api → localhost:3001 (strips /api prefix).
+// In production (Railway), Express serves frontend + API on the same port — use /v1 directly.
+const BASE = import.meta.env.PROD ? '/v1' : '/api/v1';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {

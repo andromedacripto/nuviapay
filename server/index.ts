@@ -9,6 +9,8 @@
  */
 import express from 'express';
 import cors from 'cors';
+import path from 'node:path';
+import { existsSync } from 'node:fs';
 import './db.js'; // initialise + seed on import
 
 import {
@@ -69,16 +71,26 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// ── 404 ──────────────────────────────────────────────────────────────────────
-app.use((_req, res) => {
-  res.status(404).json({ error: 'Not found' });
-});
+// ── Serve built frontend (production / Railway) ──────────────────────────────
+const distPath = path.resolve(process.cwd(), 'dist');
+if (existsSync(distPath)) {
+  app.use(express.static(distPath));
+  // SPA fallback — all non-API routes return index.html (Express 5 named wildcard)
+  app.get('/{*path}', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+} else {
+  // Dev: no dist folder — return 404 for unknown routes
+  app.use((_req, res) => {
+    res.status(404).json({ error: 'Not found' });
+  });
+}
 
 // ── Secure error handler (no stack traces to clients) ────────────────────────
 app.use(secureErrorHandler);
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`[Nuvia API] Listening on http://127.0.0.1:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[Nuvia API] Listening on http://0.0.0.0:${PORT}`);
   console.log(`[Nuvia API] Environment: ${process.env.NUVIA_ENV ?? 'arc-testnet'} (demo mode)`);
   console.log(`[Nuvia API] CORS origins: ${(process.env.CORS_ORIGINS ?? 'http://localhost:5173')}`);
 });

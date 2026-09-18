@@ -97,18 +97,19 @@ export default function Beneficiaries() {
   );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-5">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="display text-xl font-semibold text-[var(--ink)] tracking-tight">Beneficiaries</h2>
-          <p className="text-sm text-[var(--muted)] mt-0.5">{beneficiaries.length} saved</p>
+          <h2 className="display text-lg sm:text-xl font-semibold text-[var(--ink)] tracking-tight">Beneficiaries</h2>
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">{beneficiaries.length} saved</p>
         </div>
-        <Button leftIcon={<Plus size={14} />} onClick={() => { resetForm(); setShowAdd(true); }}>
-          Add beneficiary
+        <Button size="sm" leftIcon={<Plus size={14} />} onClick={() => { resetForm(); setShowAdd(true); }}>
+          <span className="hidden sm:inline">Add beneficiary</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </div>
 
-      <div className="max-w-xs">
+      <div className="max-w-full sm:max-w-xs">
         <Input
           placeholder="Search…"
           value={search}

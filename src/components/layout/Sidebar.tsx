@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, ArrowUpDown, Users, Wallet, Activity,
-  Code2, Settings, Zap, ChevronDown,
+  Code2, Settings, Zap, ChevronDown, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -14,29 +14,40 @@ const NAV = [
 ];
 
 const SECONDARY = [
-  { to: '/api-docs', icon: Code2,     label: 'API' },
-  { to: '/settings', icon: Settings,  label: 'Settings' },
+  { to: '/api-docs', icon: Code2,    label: 'API' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
-export function Sidebar() {
-  return (
-    <aside
-      className="fixed left-0 top-0 bottom-0 z-30 flex flex-col border-r border-[var(--border)] bg-[var(--surface-strong)]"
-      style={{ width: 'var(--sidebar-w)' }}
-    >
+interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ open, onClose }: SidebarProps) {
+  const inner = (
+    <div className="flex flex-col h-full">
       {/* Brand */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-[var(--border)]">
         <div className="w-8 h-8 rounded-xl bg-[var(--accent)] flex items-center justify-center shrink-0">
           <Zap size={14} fill="white" className="text-white" />
         </div>
-        <div>
+        <div className="flex-1">
           <p className="display text-sm font-bold text-[var(--ink)] tracking-tight">NUVIA</p>
           <p className="text-[10px] text-[var(--subtle)]">Payments</p>
         </div>
+        {/* Close button — mobile only */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="lg:hidden -mr-1 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[var(--surface-muted)] transition-colors"
+          >
+            <X size={16} className="text-[var(--muted)]" />
+          </button>
+        )}
       </div>
 
       {/* Org selector */}
-      <button className="mx-3 mt-3 px-3 py-2.5 rounded-xl border border-[var(--border)] flex items-center gap-2 text-left hover:bg-[var(--surface-muted)] transition-colors group">
+      <button className="mx-3 mt-3 px-3 py-2.5 rounded-xl border border-[var(--border)] flex items-center gap-2 text-left hover:bg-[var(--surface-muted)] transition-colors">
         <div className="w-6 h-6 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
           <span className="display text-[10px] font-bold text-[var(--accent)]">N</span>
         </div>
@@ -53,6 +64,7 @@ export function Sidebar() {
           <NavLink
             key={to}
             to={to}
+            onClick={onClose}
             className={({ isActive }) => cn(
               'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-100',
               isActive
@@ -72,6 +84,7 @@ export function Sidebar() {
           <NavLink
             key={to}
             to={to}
+            onClick={onClose}
             className={({ isActive }) => cn(
               'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-100',
               isActive
@@ -90,6 +103,42 @@ export function Sidebar() {
           <p className="text-[10px] text-[var(--warning)]/70 leading-snug">No real funds. Arc Testnet only.</p>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop: fixed sidebar */}
+      <aside
+        className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 z-30 border-r border-[var(--border)] bg-[var(--surface-strong)]"
+        style={{ width: 'var(--sidebar-w)' }}
+      >
+        {inner}
+      </aside>
+
+      {/* Mobile: drawer + overlay */}
+      {open !== undefined && (
+        <>
+          {/* Backdrop */}
+          <div
+            className={cn(
+              'lg:hidden fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-200',
+              open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+            )}
+            onClick={onClose}
+          />
+          {/* Drawer */}
+          <aside
+            className={cn(
+              'lg:hidden fixed left-0 top-0 bottom-0 z-50 flex flex-col border-r border-[var(--border)] bg-[var(--surface-strong)] transition-transform duration-200',
+              open ? 'translate-x-0' : '-translate-x-full'
+            )}
+            style={{ width: 'min(var(--sidebar-w), 80vw)' }}
+          >
+            {inner}
+          </aside>
+        </>
+      )}
+    </>
   );
 }

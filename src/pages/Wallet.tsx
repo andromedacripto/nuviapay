@@ -113,11 +113,11 @@ export default function WalletPage() {
   const availableBalance = walletData?.available_balance ?? '0';
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5 sm:space-y-6">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="display text-xl font-semibold text-[var(--ink)] tracking-tight">Wallet</h2>
-          <p className="text-sm text-[var(--muted)] mt-0.5">Arc Testnet · USDC</p>
+          <h2 className="display text-lg sm:text-xl font-semibold text-[var(--ink)] tracking-tight">Wallet</h2>
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">Arc Testnet · USDC</p>
         </div>
         <Button size="sm" variant="secondary" leftIcon={<RefreshCw size={12} />} onClick={() => { void load(); void refetchBalance(); }}>
           Refresh

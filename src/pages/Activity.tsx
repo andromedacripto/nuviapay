@@ -50,10 +50,10 @@ export default function Activity() {
   useEffect(() => { void load(); }, [load]);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-4 sm:space-y-5">
       <div>
-        <h2 className="display text-xl font-semibold text-[var(--ink)] tracking-tight">Activity</h2>
-        <p className="text-sm text-[var(--muted)] mt-0.5">Audit trail and transaction history</p>
+        <h2 className="display text-lg sm:text-xl font-semibold text-[var(--ink)] tracking-tight">Activity</h2>
+        <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">Audit trail and transaction history</p>
       </div>
 
       {/* Tabs */}

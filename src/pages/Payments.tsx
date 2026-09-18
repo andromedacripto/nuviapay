@@ -60,20 +60,23 @@ export default function Payments() {
   );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="display text-xl font-semibold text-[var(--ink)] tracking-tight">Payments</h2>
-          <p className="text-sm text-[var(--muted)] mt-0.5">{payments.length} payment{payments.length !== 1 ? 's' : ''}</p>
+          <h2 className="display text-lg sm:text-xl font-semibold text-[var(--ink)] tracking-tight">Payments</h2>
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">{payments.length} payment{payments.length !== 1 ? 's' : ''}</p>
         </div>
-        <Button leftIcon={<Plus size={14} />} onClick={() => setShowCreate(true)}>New payment</Button>
+        <Button size="sm" leftIcon={<Plus size={14} />} onClick={() => setShowCreate(true)}>
+          <span className="hidden sm:inline">New payment</span>
+          <span className="sm:hidden">New</span>
+        </Button>
       </div>
 
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-        {/* Status filters */}
-        <div className="flex items-center gap-1 p-1 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
+        {/* Status filters — scrollable on mobile */}
+        <div className="flex items-center gap-1 p-1 rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-x-auto max-w-full scrollbar-none">
           {FILTERS.map(f => (
             <button
               key={f.key}

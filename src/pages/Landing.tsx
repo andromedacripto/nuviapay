@@ -9,16 +9,16 @@ export default function Landing() {
     <div className="min-h-dvh bg-[var(--bg)] text-[var(--ink)]">
       {/* Nav */}
       <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--surface-strong)]/90 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-[var(--accent)] flex items-center justify-center">
               <Zap size={12} fill="white" className="text-white" />
             </div>
             <span className="display text-sm font-bold text-[var(--ink)] tracking-tight">NUVIA</span>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors">Docs</button>
-            <button className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors">Pricing</button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="hidden sm:inline text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors">Docs</button>
+            <button className="hidden sm:inline text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors">Pricing</button>
             <Button size="sm" onClick={() => { void navigate('/dashboard'); }}>
               Launch app
             </Button>
@@ -27,18 +27,18 @@ export default function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-20 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--muted)] mb-8">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--muted)] mb-6 sm:mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)] animate-pulse" />
           Powered by Arc Network · USDC settlement
         </div>
 
-        <h1 className="display text-5xl md:text-6xl font-bold text-[var(--ink)] tracking-tight leading-[1.05] mb-6" style={{ letterSpacing: '-0.03em' }}>
+        <h1 className="display text-4xl sm:text-5xl md:text-6xl font-bold text-[var(--ink)] tracking-tight leading-[1.05] mb-5 sm:mb-6" style={{ letterSpacing: '-0.03em' }}>
           Move money globally.<br />
           <span className="text-[var(--accent-hover)]">Without the complexity.</span>
         </h1>
 
-        <p className="text-lg text-[var(--muted)] max-w-2xl mx-auto text-pretty mb-10 leading-relaxed">
+        <p className="text-base sm:text-lg text-[var(--muted)] max-w-2xl mx-auto text-pretty mb-8 sm:mb-10 leading-relaxed">
           Nuvia gives businesses a simple interface for global payments,
           powered by USDC and the Arc network. Send to any beneficiary.
           Settle in seconds.
@@ -78,17 +78,17 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="text-center mb-12">
-          <h2 className="display text-3xl font-bold text-[var(--ink)] tracking-tight mb-3">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="display text-2xl sm:text-3xl font-bold text-[var(--ink)] tracking-tight mb-3">
             Built for business finance teams
           </h2>
-          <p className="text-[var(--muted)] text-pretty">
+          <p className="text-sm sm:text-base text-[var(--muted)] text-pretty">
             Everything you need to move money — nothing you don't.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {FEATURES.map(f => {
             const Icon = f.icon;
             return (
@@ -105,15 +105,15 @@ export default function Landing() {
       </section>
 
       {/* Payment flow visual */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8">
-          <h2 className="display text-2xl font-bold text-[var(--ink)] tracking-tight mb-2">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-8">
+          <h2 className="display text-xl sm:text-2xl font-bold text-[var(--ink)] tracking-tight mb-2">
             How payment settlement works
           </h2>
-          <p className="text-sm text-[var(--muted)] mb-8">
+          <p className="text-sm text-[var(--muted)] mb-6 sm:mb-8">
             Nuvia abstracts blockchain complexity. Your team sees payments; we handle the rail.
           </p>
-          <div className="grid md:grid-cols-5 gap-4 items-start">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 items-start">
             {FLOW_STEPS.map((step, i) => (
               <div key={step.label} className="flex flex-col items-center text-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[var(--surface-muted)] border border-[var(--border)] flex items-center justify-center text-sm font-bold display text-[var(--ink-2)]">
@@ -131,7 +131,7 @@ export default function Landing() {
       </section>
 
       {/* Fiat abstraction notice */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] p-6 flex flex-col md:flex-row gap-6 items-start">
           <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
             <Globe size={18} className="text-[var(--accent)]" />
@@ -151,7 +151,7 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-5xl mx-auto px-6 pb-24 text-center">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-20 sm:pb-24 text-center">
         <h2 className="display text-3xl font-bold text-[var(--ink)] tracking-tight mb-3">
           Ready to build?
         </h2>

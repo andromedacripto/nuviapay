@@ -72,20 +72,21 @@ export default function Overview() {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-5 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="display text-xl font-semibold text-[var(--ink)] tracking-tight">Overview</h2>
-          <p className="text-sm text-[var(--muted)] mt-0.5">Welcome back. Here's what's happening.</p>
+          <h2 className="display text-lg sm:text-xl font-semibold text-[var(--ink)] tracking-tight">Overview</h2>
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">Welcome back. Here's what's happening.</p>
         </div>
-        <Button leftIcon={<Plus size={14} />} onClick={() => setShowCreate(true)}>
-          New payment
+        <Button size="sm" leftIcon={<Plus size={14} />} onClick={() => setShowCreate(true)}>
+          <span className="hidden sm:inline">New payment</span>
+          <span className="sm:hidden">New</span>
         </Button>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {kpis.map(k => {
           const Icon = k.icon;
           return (
@@ -106,7 +107,7 @@ export default function Overview() {
       </div>
 
       {/* Bottom row */}
-      <div className="grid lg:grid-cols-[1fr_320px] gap-6">
+      <div className="grid lg:grid-cols-[1fr_320px] gap-4 sm:gap-6">
         {/* Recent payments */}
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">

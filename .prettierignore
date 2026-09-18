@@ -1,0 +1,8 @@
+node_modules/
+dist/
+out/
+.husky/
+contracts/out/
+contracts/cache/
+*.min.js
+bun.lock

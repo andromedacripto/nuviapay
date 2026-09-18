@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Arc Design Tokens: Light Mode ─────────────────────────────────────── */
+:root {
+  --sidebar-w: 240px;
+  --topbar-h:  56px;
+
+  /* Canvas */
+  --bg:          #f5f5f8;
+  --bg-deep:     #ededf2;
+
+  /* Surfaces */
+  --surface:        rgba(255,255,255,0.82);
+  --surface-strong: rgba(255,255,255,0.96);
+  --surface-muted:  #f0f0f5;
+  --surface-hover:        rgba(255,255,255,0.70);
+  --surface-muted-hover:  #e8e8ef;
+
+  /* Text */
+  --ink:    #0f1f35;
+  --ink-2:  #1e3a57;
+  --muted:  #64748b;
+  --subtle: #94a3b8;
+
+  /* Borders */
+  --border:        rgba(15,31,53,0.10);
+  --border-strong: rgba(15,31,53,0.28);
+
+  /* Accent — dark navy (Arc Light CTA) */
+  --accent:    #122d45;
+  --accent-fg: #ffffff;
+  --accent-hover: #1a4068;
+  --focus:     #85b1ed;
+
+  /* Semantic */
+  --success:    #1a8047;
+  --success-bg: #e8f7ef;
+  --danger:     #ba2b4c;
+  --danger-bg:  #fcedf1;
+  --warning:    #a16207;
+  --warning-bg: #fef3c7;
+  --blue:       #1d4ed8;
+  --blue-bg:    #eff6ff;
+}
+
+/* ─── Arc Design Tokens: Dark Mode ──────────────────────────────────────── */
+.dark {
+  --bg:          #0d1b2f;
+  --bg-deep:     #0a1520;
+
+  --surface:        rgba(255,255,255,0.07);
+  --surface-strong: rgba(255,255,255,0.11);
+  --surface-muted:  #1f2f44;
+  --surface-hover:        rgba(255,255,255,0.09);
+  --surface-muted-hover:  #263a53;
+
+  --ink:    #f0f6ff;
+  --ink-2:  #d6e4f5;
+  --muted:  #94a3b8;
+  --subtle: #64748b;
+
+  --border:        rgba(255,255,255,0.10);
+  --border-strong: rgba(203,219,242,0.45);
+
+  --accent:    #acc6e9;
+  --accent-fg: #0d1b2f;
+  --accent-hover: #c5d9f2;
+  --focus:     #85b1ed;
+
+  --success:    #86efac;
+  --success-bg: rgba(134,239,172,0.10);
+  --danger:     #f87171;
+  --danger-bg:  rgba(248,113,113,0.12);
+  --warning:    #fde68a;
+  --warning-bg: rgba(253,230,138,0.10);
+  --blue:       #93c5fd;
+  --blue-bg:    rgba(147,197,253,0.10);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 16px; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Typography helpers ─────────────────────────────────────────────────── */
+.display { font-family: 'Space Grotesk', sans-serif; }
+.mono    { font-family: 'JetBrains Mono', Menlo, monospace; font-size: 0.875em; }
+.tabular { font-variant-numeric: tabular-nums; }
+.label-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+/* ─── Focus ring ─────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ─── Number precision ───────────────────────────────────────────────────── */
+.amount-display {
+  font-family: 'Space Grotesk', sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}

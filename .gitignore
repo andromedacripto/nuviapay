@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.bun/
+
+# Build output
+dist/
+out/
+build/
+
+# Secrets — NEVER commit these
+.env
+.env.*
+!env.example
+*.pem
+*.key
+*.p12
+*.pfx
+recovery_file*.dat
+.circle/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+nuvia.db
+
+# Logs
+*.log
+/tmp/
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/

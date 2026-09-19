@@ -48,9 +48,15 @@ const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS ?? 'http://localhost:5173')
 
 export const corsOptions: Parameters<typeof import('cors').default>[0] = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (server-to-server, curl)
+    // Allow requests with no origin (server-to-server, curl, same-origin Railway)
     if (!origin) { callback(null, true); return; }
-    if (ALLOWED_ORIGINS.includes(origin)) {
+    // In production, frontend and backend share the same Railway domain —
+    // allow all railway.app origins plus the explicit allowlist
+    if (
+      ALLOWED_ORIGINS.includes(origin) ||
+      origin.endsWith('.railway.app') ||
+      origin.endsWith('.up.railway.app')
+    ) {
       callback(null, true);
     } else {
       callback(new Error(`CORS policy: origin '${origin}' not allowed`));

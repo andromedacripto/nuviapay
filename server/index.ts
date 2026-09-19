@@ -75,8 +75,8 @@ app.get('/health', (_req, res) => {
 const distPath = path.resolve(process.cwd(), 'dist');
 if (existsSync(distPath)) {
   app.use(express.static(distPath));
-  // SPA fallback — all non-API routes return index.html (Express 5 named wildcard)
-  app.get('/{*path}', (_req, res) => {
+  // SPA fallback — serve index.html for all non-API routes
+  app.use((_req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
 } else {

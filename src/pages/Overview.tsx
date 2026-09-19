@@ -30,7 +30,7 @@ export default function Overview() {
       setStats(s);
       setPayments(p.payments.slice(0, 5));
       setWallet(w.data);
-    } catch { /* handled silently in demo */ }
+    } catch { /* network errors handled silently */ }
     finally { setLoading(false); }
   }, []);
 

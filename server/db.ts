@@ -160,40 +160,7 @@ if (!org) {
   db.exec(`INSERT INTO wallets(id,org_id,network,is_primary) VALUES('${walletId}','${ORG_ID}','arc-testnet',1)`);
   db.exec(`INSERT INTO balances(id,wallet_id,usdc_balance) VALUES('bal_01','${walletId}','0')`);
 
-  // Seed demo beneficiaries — these are demo wallet addresses for testnet use only // arc-studio-allow-onchain-literal
-  const demoBens = [
-    { id:'ben_001', name:'Apex Logistics', company:'Apex Group', addr:'0x742d35Cc6634C0532925a3b8D4c9A1234567890a', country:'US', label:'Supplier' }, // arc-studio-allow-onchain-literal
-    { id:'ben_002', name:'TechFlow GmbH',  company:'TechFlow',  addr:'0x1234567890AbCdEf1234567890abcdef12345678', country:'EU', label:'Partner' },   // arc-studio-allow-onchain-literal
-    { id:'ben_003', name:'Pacific Freight',company:null,        addr:'0xAbCdEf1234567890abcdef1234567890abcdef12', country:'SG', label:'Freight' },    // arc-studio-allow-onchain-literal
-  ];
-  for (const b of demoBens) {
-    db.prepare(`INSERT INTO beneficiaries(id,org_id,name,company,wallet_address,country,label) VALUES(?,?,?,?,?,?,?)`)
-      .run(b.id, ORG_ID, b.name, b.company, b.addr, b.country, b.label);
-  }
-
-  // Seed demo payments
-  const now = new Date().toISOString();
-  const demoPays = [
-    { id:'pay_001', name:'Apex Logistics', addr: demoBens[0].addr, amount:'12500.00', status:'confirmed', ref:'INV-2026-001' },
-    { id:'pay_002', name:'TechFlow GmbH',  addr: demoBens[1].addr, amount:'5000.00',  status:'confirmed', ref:'INV-2026-002' },
-    { id:'pay_003', name:'Pacific Freight',addr: demoBens[2].addr, amount:'28000.00', status:'processing',ref:'INV-2026-003' },
-    { id:'pay_004', name:'Apex Logistics', addr: demoBens[0].addr, amount:'7500.00',  status:'pending_approval', ref:'INV-2026-004' },
-  ];
-  const stmt = db.prepare(`INSERT INTO payments(id,org_id,beneficiary_name,wallet_address,amount,currency,status,network,reference,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)`);
-  for (const p of demoPays) {
-    stmt.run(p.id, ORG_ID, p.name, p.addr, p.amount, 'USDC', p.status, 'arc-testnet', p.ref, now, now);
-  }
-
-  // Seed audit log
-  const alStmt = db.prepare(`INSERT INTO audit_logs(id,org_id,user_id,action,entity_type,entity_id) VALUES(?,?,?,?,?,?)`);
-  alStmt.run('al_001', ORG_ID, USER_ID, 'payment.confirmed', 'payment', 'pay_001');
-  alStmt.run('al_002', ORG_ID, USER_ID, 'payment.confirmed', 'payment', 'pay_002');
-  alStmt.run('al_003', ORG_ID, USER_ID, 'payment.processing','payment', 'pay_003');
-  alStmt.run('al_004', ORG_ID, USER_ID, 'beneficiary.created','beneficiary','ben_001');
-  alStmt.run('al_005', ORG_ID, USER_ID, 'beneficiary.created','beneficiary','ben_002');
-  alStmt.run('al_006', ORG_ID, USER_ID, 'beneficiary.created','beneficiary','ben_003');
-
-  console.log('[Nuvia DB] Seeded demo data');
+  console.log('[Nuvia DB] Initialized fresh org — no demo data');
 }
 
 export default db;

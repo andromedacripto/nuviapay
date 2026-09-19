@@ -200,7 +200,7 @@ export default function Payments() {
                           )}
                           {detail.transaction.tx_hash && (
                             <a
-                              href={`https://explorer.arc.io/tx/${detail.transaction.tx_hash}`}
+                              href={`https://explorer.testnet.arc.io/tx/${detail.transaction.tx_hash}`}
                               target="_blank"
                               rel="noreferrer"
                               className="inline-flex items-center gap-1 text-xs text-[var(--accent)] hover:underline"

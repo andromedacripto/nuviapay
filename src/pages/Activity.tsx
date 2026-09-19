@@ -163,7 +163,7 @@ export default function Activity() {
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="mono text-xs text-[var(--ink)] truncate">{formatAddress(tx.tx_hash ?? '—', 8)}</span>
                     {tx.tx_hash && (
-                      <a href={`https://explorer.arc.io/tx/${tx.tx_hash}`} target="_blank" rel="noreferrer"
+                      <a href={`https://explorer.testnet.arc.io/tx/${tx.tx_hash}`} target="_blank" rel="noreferrer"
                         className="text-[var(--subtle)] hover:text-[var(--accent)] transition-colors shrink-0">
                         <ExternalLink size={11} />
                       </a>

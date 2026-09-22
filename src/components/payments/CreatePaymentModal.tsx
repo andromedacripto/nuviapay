@@ -76,12 +76,21 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
   const usdcToken = getUsdc(arcTestnet.id);
   const paymentRef = useRef<Payment | null>(null);
 
-  const { data: usdcBalance } = useBalance({
+  // On Arc, USDC is the native gas token — read native (18 dec) as reliable fallback
+  const { data: nativeBalance } = useBalance({
+    address,
+    chainId: arcTestnet.id,
+    query: { enabled: isConnected && !!address },
+  });
+  const { data: erc20Balance } = useBalance({
     address,
     token: usdcToken?.address as `0x${string}` | undefined,
     chainId: arcTestnet.id,
     query: { enabled: isConnected && !!address && !!usdcToken },
   });
+  const usdcBalance = erc20Balance ?? (nativeBalance
+    ? { ...nativeBalance, value: nativeBalance.value / BigInt(10 ** 12), decimals: 6 }
+    : undefined);
 
   const { writeContract, data: writeHash, isPending: isWriting, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: onChainConfirmed } =

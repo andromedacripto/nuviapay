@@ -21,12 +21,27 @@ export default function WalletPage() {
   const { address, isConnected } = useAccount();
   const usdcToken = getUsdc(arcTestnet.id);
 
-  const { data: usdcBalance, refetch: refetchBalance } = useBalance({
+  // On Arc, USDC is also the native gas token.
+  // We read the native balance (18 dec) which is always available,
+  // and convert to the ERC-20 6-decimal view for display.
+  const { data: nativeBalance, refetch: refetchBalance } = useBalance({
+    address,
+    chainId: arcTestnet.id,
+    query: { enabled: isConnected && !!address },
+  });
+
+  // Also try ERC-20 read as a cross-check (may be null on some RPC nodes)
+  const { data: erc20Balance } = useBalance({
     address,
     token: usdcToken?.address as `0x${string}` | undefined,
     chainId: arcTestnet.id,
     query: { enabled: isConnected && !!address && !!usdcToken },
   });
+
+  // Prefer ERC-20 (6 dec) if available; fall back to native converted to 6 dec
+  const usdcBalance = erc20Balance ?? (nativeBalance
+    ? { ...nativeBalance, value: nativeBalance.value / BigInt(10 ** 12), decimals: 6 }
+    : undefined);
 
   const [walletData,  setWalletData]  = useState<WalletData | null>(null);
   const [payments,    setPayments]    = useState<Payment[]>([]);

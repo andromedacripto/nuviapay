@@ -150,17 +150,34 @@ CREATE INDEX IF NOT EXISTS idx_audit_org ON audit_logs(org_id, created_at DESC);
 const ORG_ID = 'org_demo';
 const USER_ID = 'mem_01';
 
+// ── Remove any legacy seed/demo data from previous versions ──────────────────
+// This runs once and cleans up fake payments/beneficiaries that were seeded in
+// older builds. Safe to run on every boot — deletes only known fake IDs.
+const LEGACY_PAYMENT_IDS = ['pay_001','pay_002','pay_003','pay_004'];
+const LEGACY_BEN_IDS     = ['ben_001','ben_002','ben_003'];
+for (const id of LEGACY_PAYMENT_IDS) {
+  db.prepare('DELETE FROM payments WHERE id = ?').run(id);
+}
+for (const id of LEGACY_BEN_IDS) {
+  db.prepare('DELETE FROM beneficiaries WHERE id = ?').run(id);
+}
+// Also nuke any payment whose beneficiary_name looks like seed data
+db.prepare(`DELETE FROM payments WHERE beneficiary_name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight')`).run();
+db.prepare(`DELETE FROM beneficiaries WHERE name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight')`).run();
+
+// ── Bootstrap org (first run only) ───────────────────────────────────────────
 const org = db.prepare('SELECT id FROM organizations WHERE id = ?').get(ORG_ID);
 if (!org) {
-  db.exec(`INSERT INTO organizations(id,name,plan) VALUES('${ORG_ID}','Nuvia Demo Org','demo')`);
-  db.exec(`INSERT INTO users(id,org_id,email,role) VALUES('${USER_ID}','${ORG_ID}','demo@nuvia.io','owner')`);
+  db.exec(`INSERT INTO organizations(id,name,plan) VALUES('${ORG_ID}','My Organization','starter')`);
+  db.exec(`INSERT INTO users(id,org_id,email,role) VALUES('${USER_ID}','${ORG_ID}','admin@nuvia.io','owner')`);
   db.exec(`INSERT INTO organization_members(id,org_id,user_id,role) VALUES('mem_link_01','${ORG_ID}','${USER_ID}','owner')`);
 
   const walletId = `wal_${uuid().replace(/-/g,'').slice(0,12)}`;
   db.exec(`INSERT INTO wallets(id,org_id,network,is_primary) VALUES('${walletId}','${ORG_ID}','arc-testnet',1)`);
   db.exec(`INSERT INTO balances(id,wallet_id,usdc_balance) VALUES('bal_01','${walletId}','0')`);
-
-  console.log('[Nuvia DB] Initialized fresh org — no demo data');
+} else {
+  // Update org name if still showing old demo value
+  db.prepare(`UPDATE organizations SET name = 'My Organization', plan = 'starter' WHERE id = ? AND name IN ('Nuvia Demo Org','Demo Org')`).run(ORG_ID);
 }
 
 export default db;

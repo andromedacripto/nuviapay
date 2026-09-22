@@ -18,6 +18,7 @@ export default function Overview() {
   const [wallet,   setWallet]   = useState<WalletData | null>(null);
   const [loading,  setLoading]  = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [netOk,    setNetOk]   = useState<boolean | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -35,6 +36,18 @@ export default function Overview() {
   }, []);
 
   useEffect(() => { void load(); }, [load]);
+
+  // Ping Arc Testnet RPC to get real network status
+  useEffect(() => {
+    fetch('https://rpc.testnet.arc.io', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_blockNumber', params: [], id: 1 }),
+      signal: AbortSignal.timeout(5000),
+    })
+      .then(r => r.ok ? setNetOk(true) : setNetOk(false))
+      .catch(() => setNetOk(false));
+  }, []);
 
   const kpis = [
     {
@@ -200,9 +213,13 @@ export default function Overview() {
             <p className="text-sm font-semibold text-[var(--ink)] mb-3">Network status</p>
             <div className="space-y-2.5">
               {[
-                { label: 'Arc Testnet',   value: 'Operational', ok: true },
-                { label: 'Settlement',     value: '< 1 second',   ok: true },
-                { label: 'USDC contract',  value: 'Verified',     ok: true },
+                {
+                  label: 'Arc Testnet',
+                  value: netOk === null ? 'Checking…' : netOk ? 'Operational' : 'Degraded',
+                  ok:    netOk !== false,
+                },
+                { label: 'Settlement',    value: '< 1 second', ok: true },
+                { label: 'USDC contract', value: 'Verified',   ok: true },
               ].map(row => (
                 <div key={row.label} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">

@@ -21,7 +21,7 @@ const ENDPOINTS = [
     "status": "processing",
     "amount": "10000.00",
     "currency": "USDC",
-    "network": "arc-testnet",
+    "network": "arc",
     "beneficiary_name": "Jane Smith",
     "created_at": "2026-09-18T10:00:00Z"
   }
@@ -86,7 +86,7 @@ const ENDPOINTS = [
     "usdc_balance": "1250.000000",
     "available_balance": "1250.000000",
     "wallet_address": "0x...",
-    "network": "arc-testnet"
+    "network": "arc"
   }
 }`,
   },

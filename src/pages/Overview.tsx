@@ -37,9 +37,9 @@ export default function Overview() {
 
   useEffect(() => { void load(); }, [load]);
 
-  // Ping Arc Testnet RPC to get real network status
+  // Ping Arc Mainnet RPC to get real network status
   useEffect(() => {
-    fetch('https://rpc.testnet.arc.io', {
+    fetch('https://rpc.mainnet.arc.io', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_blockNumber', params: [], id: 1 }),
@@ -214,7 +214,7 @@ export default function Overview() {
             <div className="space-y-2.5">
               {[
                 {
-                  label: 'Arc Testnet',
+                  label: 'Arc',
                   value: netOk === null ? 'Checking…' : netOk ? 'Operational' : 'Degraded',
                   ok:    netOk !== false,
                 },

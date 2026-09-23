@@ -99,7 +99,7 @@ export function createPayment(
   `).run(
     id, auth.orgId, safeName, safeAddress,
     body.amount, body.currency ?? 'USDC',
-    'processing', 'arc-testnet',
+    'processing', 'arc',
     safeRef, '0.001',
     body.idempotency_key ?? null,
     now, now,

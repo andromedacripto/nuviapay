@@ -70,7 +70,7 @@ export default function Settings() {
               <div className="space-y-4 max-w-md">
                 <Input label="Organization name" value={orgName} onChange={e => setOrgName(e.target.value)} />
                 <Input label="Plan" value="Demo" disabled />
-                <Input label="Network" value="Arc Testnet" disabled />
+                <Input label="Network" value="Arc" disabled />
                 <Button loading={saving} onClick={() => void handleSave()}>Save changes</Button>
               </div>
             </div>

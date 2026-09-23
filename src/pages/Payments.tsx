@@ -178,7 +178,7 @@ export default function Payments() {
                       </div>
                       <div className="space-y-3">
                         <p className="text-[10px] font-semibold text-[var(--subtle)] label-caps">Settlement</p>
-                        <Row label="Network"    value="Arc Testnet" />
+                        <Row label="Network"    value="Arc" />
                         <Row label="Status"     value={<StatusBadge status={detail.payment.status} dot />} />
                         <Row label="Created"    value={formatDateTime(detail.payment.created_at)} />
                         <Row label="Updated"    value={formatDateTime(detail.payment.updated_at)} />
@@ -200,7 +200,7 @@ export default function Payments() {
                           )}
                           {detail.transaction.tx_hash && (
                             <a
-                              href={`https://explorer.testnet.arc.io/tx/${detail.transaction.tx_hash}`}
+                              href={`https://explorer.arc.io/tx/${detail.transaction.tx_hash}`}
                               target="_blank"
                               rel="noreferrer"
                               className="inline-flex items-center gap-1 text-xs text-[var(--accent)] hover:underline"

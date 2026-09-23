@@ -66,7 +66,7 @@ app.use('/v1/webhooks',      webhooksRouter);
 app.get('/health', (_req, res) => {
   res.json({
     status:  'ok',
-    env:     process.env.NUVIA_ENV ?? 'arc-testnet',
+    env:     process.env.NUVIA_ENV ?? 'arc',
     version: '1.0.0',
   });
 });
@@ -91,6 +91,6 @@ app.use(secureErrorHandler);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[Nuvia API] Listening on http://0.0.0.0:${PORT}`);
-  console.log(`[Nuvia API] Environment: ${process.env.NUVIA_ENV ?? 'arc-testnet'} (demo mode)`);
+  console.log(`[Nuvia API] Environment: ${process.env.NUVIA_ENV ?? 'arc'} `);
   console.log(`[Nuvia API] CORS origins: ${(process.env.CORS_ORIGINS ?? 'http://localhost:5173')}`);
 });

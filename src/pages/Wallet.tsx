@@ -132,7 +132,7 @@ export default function WalletPage() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="display text-lg sm:text-xl font-semibold text-[var(--ink)] tracking-tight">Wallet</h2>
-          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">Arc Testnet · USDC</p>
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">Arc · USDC</p>
         </div>
         <Button size="sm" variant="secondary" leftIcon={<RefreshCw size={12} />} onClick={() => { void load(); void refetchBalance(); }}>
           Refresh
@@ -178,7 +178,7 @@ export default function WalletPage() {
             }
           </p>
           <p className="text-xs text-[var(--subtle)] mt-2">
-            {isConnected ? 'Live from Arc Testnet' : 'Connect wallet in the top bar'}
+            {isConnected ? 'Live from Arc Mainnet' : 'Connect wallet in the top bar'}
           </p>
         </div>
       </div>
@@ -195,7 +195,7 @@ export default function WalletPage() {
                   {copied ? <Check size={13} className="text-[var(--success)]" /> : <Copy size={13} />}
                 </button>
                 <a
-                  href={`https://explorer.testnet.arc.io/address/${displayAddress}`}
+                  href={`https://explorer.arc.io/address/${displayAddress}`}
                   target="_blank"
                   rel="noreferrer"
                   className="p-1 text-[var(--subtle)] hover:text-[var(--accent)] transition-colors"
@@ -206,7 +206,7 @@ export default function WalletPage() {
             ) : (
               <p className="text-sm text-[var(--muted)]">Connect wallet to view address</p>
             )}
-            <p className="text-[10px] text-[var(--subtle)] mt-1">Arc Testnet · USDC</p>
+            <p className="text-[10px] text-[var(--subtle)] mt-1">Arc · USDC</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -220,16 +220,16 @@ export default function WalletPage() {
         </div>
       </div>
 
-      {/* Arc Testnet Faucet */}
+      {/* Arc Faucet */}
       <div className="rounded-2xl border border-[var(--accent)]/20 bg-[var(--accent)]/4 p-5">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
             <Droplets size={18} className="text-[var(--accent)]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[var(--ink)]">Get testnet USDC</p>
+            <p className="text-sm font-semibold text-[var(--ink)]">Get USDC</p>
             <p className="text-xs text-[var(--muted)] mt-0.5">
-              Need USDC to test payments? Use the Arc Testnet faucet to get free test tokens.
+              Need USDC? Use the Circle faucet or buy via your wallet provider.
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
               <a
@@ -253,7 +253,7 @@ export default function WalletPage() {
               )}
             </div>
             <p className="text-[10px] text-[var(--subtle)] mt-2">
-              Select "Arc Testnet" and paste your wallet address on the faucet page.
+              Select "Arc" and paste your wallet address.
             </p>
           </div>
         </div>
@@ -322,7 +322,7 @@ export default function WalletPage() {
               Copy address
             </Button>
           )}
-          <p className="text-xs text-[var(--subtle)]">Send USDC on Arc Testnet only</p>
+          <p className="text-xs text-[var(--subtle)]">Send USDC on Arc only</p>
         </div>
       </Modal>
 
@@ -354,7 +354,7 @@ export default function WalletPage() {
           <div className="p-3 rounded-xl bg-[var(--surface-muted)] border border-[var(--border)] space-y-1.5">
             <div className="flex justify-between text-xs">
               <span className="text-[var(--subtle)]">Network</span>
-              <span className="text-[var(--ink)]">Arc Testnet</span>
+              <span className="text-[var(--ink)]">Arc</span>
             </div>
             <div className="flex justify-between text-xs">
               <span className="text-[var(--subtle)]">Est. fee</span>

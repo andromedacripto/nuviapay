@@ -52,8 +52,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <span className="display text-[10px] font-bold text-[var(--accent)]">N</span>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-[var(--ink)] truncate">Demo Org</p>
-          <p className="text-[10px] text-[var(--subtle)]">Arc Testnet</p>
+          <p className="text-xs font-semibold text-[var(--ink)] truncate">My Organization</p>
+          <p className="text-[10px] text-[var(--subtle)]">Arc · USDC</p>
         </div>
         <ChevronDown size={12} className="text-[var(--subtle)] shrink-0" />
       </button>
@@ -97,10 +97,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           </NavLink>
         ))}
 
-        {/* Demo badge */}
-        <div className="mt-3 mx-1 px-3 py-2 rounded-xl bg-[var(--warning-bg)] border border-[var(--warning)]/20">
-          <p className="text-[10px] font-semibold text-[var(--warning)] label-caps mb-0.5">Demo / Testnet</p>
-          <p className="text-[10px] text-[var(--warning)]/70 leading-snug">No real funds. Arc Testnet only.</p>
+        {/* Network badge */}
+        <div className="mt-3 mx-1 px-3 py-2 rounded-xl bg-[var(--accent)]/6 border border-[var(--accent)]/15">
+          <p className="text-[10px] font-semibold text-[var(--accent)] label-caps mb-0.5">Arc Mainnet</p>
+          <p className="text-[10px] text-[var(--accent)]/70 leading-snug">USDC · Sub-second settlement</p>
         </div>
       </div>
     </div>

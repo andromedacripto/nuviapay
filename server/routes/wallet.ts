@@ -18,7 +18,7 @@ walletRouter.get('/balance', requireAuth, (req, res) => {
         available_balance: '0',
         on_chain_balance:  '0',
         wallet_address:    null,
-        network:           'arc-testnet',
+        network:           'arc',
         last_synced_at:    null,
       },
     });
@@ -71,7 +71,7 @@ walletRouter.get('/network-status', requireAuth, (_req, res) => {
   res.json({
     data: {
       status:    'operational',
-      network:   'arc-testnet',
+      network:   'arc',
       latency:   42,
       blockTime: '< 1 second',
     },

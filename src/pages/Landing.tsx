@@ -64,7 +64,7 @@ export default function Landing() {
         {/* Mini stats */}
         <div className="mt-16 grid grid-cols-3 gap-px rounded-2xl border border-[var(--border)] overflow-hidden">
           {[
-            { label: 'Settlement time', value: '< 1 second', sub: 'Arc Testnet finality' },
+            { label: 'Settlement time', value: '< 1 second', sub: 'Arc finality' },
             { label: 'Transaction fee', value: '~$0.001', sub: 'USDC on Arc' },
             { label: 'Currencies', value: 'USDC first', sub: 'Fiat rails coming soon' },
           ].map(s => (
@@ -219,7 +219,7 @@ const FEATURES = [
 const FLOW_STEPS = [
   { label: 'Create payment', desc: 'Enter amount, beneficiary, and reference' },
   { label: 'Review & approve', desc: 'Finance team reviews; larger payments require approval' },
-  { label: 'USDC sent', desc: 'Signed transaction submitted to Arc Testnet' },
+  { label: 'USDC sent', desc: 'Signed transaction submitted to Arc' },
   { label: 'Confirmed', desc: 'Block confirmation in < 1 second' },
   { label: 'Receipt', desc: 'Transaction hash, amount, and timestamp recorded' },
 ];

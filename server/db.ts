@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS wallets (
   id          TEXT PRIMARY KEY,
   org_id      TEXT NOT NULL REFERENCES organizations(id),
   address     TEXT,
-  network     TEXT NOT NULL DEFAULT 'arc-testnet',
+  network     TEXT NOT NULL DEFAULT 'arc',
   is_primary  INTEGER NOT NULL DEFAULT 1,
   created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS payments (
   amount           TEXT NOT NULL,
   currency         TEXT NOT NULL DEFAULT 'USDC',
   status           TEXT NOT NULL DEFAULT 'draft',
-  network          TEXT NOT NULL DEFAULT 'arc-testnet',
+  network          TEXT NOT NULL DEFAULT 'arc',
   reference        TEXT,
   fee_usdc         TEXT NOT NULL DEFAULT '0.001',
   idempotency_key  TEXT UNIQUE,
@@ -173,7 +173,7 @@ if (!org) {
   db.exec(`INSERT INTO organization_members(id,org_id,user_id,role) VALUES('mem_link_01','${ORG_ID}','${USER_ID}','owner')`);
 
   const walletId = `wal_${uuid().replace(/-/g,'').slice(0,12)}`;
-  db.exec(`INSERT INTO wallets(id,org_id,network,is_primary) VALUES('${walletId}','${ORG_ID}','arc-testnet',1)`);
+  db.exec(`INSERT INTO wallets(id,org_id,network,is_primary) VALUES('${walletId}','${ORG_ID}','arc',1)`);
   db.exec(`INSERT INTO balances(id,wallet_id,usdc_balance) VALUES('bal_01','${walletId}','0')`);
 } else {
   // Update org name if still showing old demo value

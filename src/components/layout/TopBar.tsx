@@ -1,6 +1,7 @@
-import { useAccount, useConnect, useDisconnect, useBalance } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useBalance, useChainId, useSwitchChain } from 'wagmi';
+import { useEffect } from 'react';
 import { injected } from 'wagmi/connectors';
-import { Wallet, ChevronDown, Wifi, Menu } from 'lucide-react';
+import { Wallet, ChevronDown, Wifi, Menu, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/Button.tsx';
 import { formatAddress } from '@/lib/utils.ts';
 import { getUsdc } from '@/onchain-facts.ts';
@@ -15,7 +16,17 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
+  const chainId = useChainId();
+  const { switchChain } = useSwitchChain();
   const usdcToken = getUsdc(arcTestnet.id);
+  const isWrongNetwork = isConnected && chainId !== arcTestnet.id;
+
+  // Auto-switch to Arc when wallet connects on wrong network
+  useEffect(() => {
+    if (isWrongNetwork) {
+      switchChain({ chainId: arcTestnet.id });
+    }
+  }, [isWrongNetwork, switchChain]);
 
   const { data: usdcBalance } = useBalance({
     address,
@@ -42,16 +53,27 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
         </button>
 
         {/* Network pill */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
-            <Wifi size={12} className="text-[var(--success)] shrink-0" />
-            <span className="hidden sm:inline">Arc Testnet</span>
+        {isWrongNetwork ? (
+          <button
+            onClick={() => switchChain({ chainId: arcTestnet.id })}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--warning-bg)] text-[var(--warning)] text-xs font-medium hover:opacity-80 transition-opacity"
+          >
+            <AlertTriangle size={11} className="shrink-0" />
+            <span className="hidden sm:inline">Switch to Arc</span>
+            <span className="sm:hidden">Wrong network</span>
+          </button>
+        ) : (
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
+              <Wifi size={12} className="text-[var(--success)] shrink-0" />
+              <span className="hidden sm:inline">Arc</span>
+            </div>
+            <span className="hidden sm:inline text-[var(--border)]">·</span>
+            <span className="px-2 py-0.5 rounded-full bg-[var(--success-bg)] text-[var(--success)] text-[10px] font-semibold label-caps">
+              Live
+            </span>
           </div>
-          <span className="hidden sm:inline text-[var(--border)]">·</span>
-          <span className="px-2 py-0.5 rounded-full bg-[var(--warning-bg)] text-[var(--warning)] text-[10px] font-semibold label-caps">
-            Demo
-          </span>
-        </div>
+        )}
       </div>
 
       {/* Right: wallet */}

@@ -213,7 +213,7 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
       // 3. Wallet must be connected — no simulation fallback
       if (!isConnected || !address || !usdcToken) {
         addTimeline('Error: wallet not connected');
-        toast.error('Connect your wallet in the top bar to send USDC on Arc Testnet');
+        toast.error('Connect your wallet in the top bar to send USDC on Arc');
         await paymentsApi.transition(created.data.id, 'failed');
         return;
       }
@@ -338,7 +338,7 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
                   >
                     <option value="USDC">USDC (stablecoin)</option>
                   </select>
-                  <p className="text-xs text-[var(--subtle)]">USDC on Arc Testnet. Fiat conversion coming soon.</p>
+                  <p className="text-xs text-[var(--subtle)]">USDC on Arc Mainnet. Fiat conversion coming soon.</p>
                 </div>
 
                 <Button className="w-full" rightIcon={<ArrowRight size={14} />} onClick={next}>
@@ -441,7 +441,7 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
                     {[
                       { label: 'Amount',       value: formatCurrency(parseFloat(form.amount) || 0) },
                       { label: 'Currency',     value: form.currency },
-                      { label: 'Network',      value: 'Arc Testnet' },
+                      { label: 'Network',      value: 'Arc' },
                       { label: 'Beneficiary',  value: form.beneficiaryName },
                       { label: 'Wallet',       value: formatAddress(form.walletAddress) },
                       { label: 'Reference',    value: form.reference || '—' },
@@ -464,7 +464,7 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
                   <div className="flex items-start gap-2 p-3 rounded-xl bg-[var(--danger-bg)] border border-[var(--danger)]/20">
                     <AlertCircle size={14} className="text-[var(--danger)] shrink-0 mt-0.5" />
                     <p className="text-xs text-[var(--danger)]">
-                      <strong>Wallet not connected.</strong> Connect your wallet in the top bar before continuing — a real on-chain USDC transfer on Arc Testnet is required.
+                      <strong>Wallet not connected.</strong> Connect your wallet in the top bar before continuing — a real on-chain USDC transfer on Arc is required.
                     </p>
                   </div>
                 )}
@@ -492,14 +492,14 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
                   <div className="p-4 rounded-xl bg-[var(--danger-bg)] border border-[var(--danger)]/20">
                     <p className="text-xs font-semibold text-[var(--danger)] mb-1">Wallet not connected</p>
                     <p className="text-xs text-[var(--danger)]/80">
-                      Connect your wallet in the top bar to send USDC on Arc Testnet.
+                      Connect your wallet in the top bar to send USDC on Arc.
                     </p>
                   </div>
                 ) : (
                   <div className="p-4 rounded-xl bg-[var(--warning-bg)] border border-[var(--warning)]/20">
                     <p className="text-xs font-semibold text-[var(--warning)] mb-1">Confirm this payment</p>
                     <p className="text-xs text-[var(--warning)]/80 text-pretty">
-                      This will initiate a real on-chain USDC transfer on Arc Testnet. This action cannot be undone.
+                      This will initiate a real on-chain USDC transfer on Arc. This action cannot be undone.
                     </p>
                   </div>
                 )}
@@ -584,10 +584,10 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
                       { label: 'Payment ID',  value: payment.id, mono: true, copy: 'pid' },
                       { label: 'Beneficiary', value: form.beneficiaryName },
                       { label: 'Amount',      value: `${form.amount} USDC` },
-                      { label: 'Network',     value: 'Arc Testnet' },
+                      { label: 'Network',     value: 'Arc' },
                       { label: 'Status',      value: 'Confirmed' },
                       { label: 'Timestamp',   value: formatDateTime(payment.created_at) },
-                      ...(txHash ? [{ label: 'Tx hash', value: formatAddress(txHash, 8), mono: true, copy: 'txh', link: `https://explorer.testnet.arc.io/tx/${txHash}` }] : []),
+                      ...(txHash ? [{ label: 'Tx hash', value: formatAddress(txHash, 8), mono: true, copy: 'txh', link: `https://explorer.arc.io/tx/${txHash}` }] : []),
                     ].map(row => (
                       <div key={row.label} className="flex items-center justify-between px-4 py-2.5 gap-3">
                         <span className="text-xs text-[var(--subtle)] shrink-0">{row.label}</span>

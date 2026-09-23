@@ -162,8 +162,8 @@ for (const id of LEGACY_BEN_IDS) {
   db.prepare('DELETE FROM beneficiaries WHERE id = ?').run(id);
 }
 // Also nuke any payment whose beneficiary_name looks like seed data
-db.prepare(`DELETE FROM payments WHERE beneficiary_name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight')`).run();
-db.prepare(`DELETE FROM beneficiaries WHERE name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight')`).run();
+db.prepare(`DELETE FROM payments WHERE beneficiary_name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight','Test Vendor','Test User','Demo User','Demo Vendor')`).run();
+db.prepare(`DELETE FROM beneficiaries WHERE name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight','Test Vendor','Test User','Demo User','Demo Vendor')`).run();
 
 // ── Bootstrap org (first run only) ───────────────────────────────────────────
 const org = db.prepare('SELECT id FROM organizations WHERE id = ?').get(ORG_ID);

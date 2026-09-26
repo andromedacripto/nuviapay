@@ -155,15 +155,22 @@ const USER_ID = 'mem_01';
 // older builds. Safe to run on every boot — deletes only known fake IDs.
 const LEGACY_PAYMENT_IDS = ['pay_001','pay_002','pay_003','pay_004'];
 const LEGACY_BEN_IDS     = ['ben_001','ben_002','ben_003'];
+// Delete audit_log and webhook_event references first (foreign key safe)
+db.prepare(`DELETE FROM audit_logs WHERE entity_id IN ('pay_001','pay_002','pay_003','pay_004','ben_001','ben_002','ben_003')`).run();
+db.prepare(`DELETE FROM webhook_events WHERE payload LIKE '%pay_001%' OR payload LIKE '%pay_002%' OR payload LIKE '%pay_003%' OR payload LIKE '%ben_001%' OR payload LIKE '%ben_002%' OR payload LIKE '%ben_003%'`).run();
 for (const id of LEGACY_PAYMENT_IDS) {
+  db.prepare('DELETE FROM transactions WHERE payment_id = ?').run(id);
   db.prepare('DELETE FROM payments WHERE id = ?').run(id);
 }
 for (const id of LEGACY_BEN_IDS) {
   db.prepare('DELETE FROM beneficiaries WHERE id = ?').run(id);
 }
-// Also nuke any payment whose beneficiary_name looks like seed data
+// Nuke any remaining seed/demo payments and beneficiaries by name
 db.prepare(`DELETE FROM payments WHERE beneficiary_name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight','Test Vendor','Test User','Demo User','Demo Vendor')`).run();
 db.prepare(`DELETE FROM beneficiaries WHERE name IN ('Apex Logistics','TechFlow GmbH','Pacific Freight','Test Vendor','Test User','Demo User','Demo Vendor')`).run();
+// Clean up orphaned audit logs (no matching entity)
+db.prepare(`DELETE FROM audit_logs WHERE entity_type = 'payment' AND entity_id NOT IN (SELECT id FROM payments)`).run();
+db.prepare(`DELETE FROM audit_logs WHERE entity_type = 'beneficiary' AND entity_id NOT IN (SELECT id FROM beneficiaries)`).run();
 
 // ── Bootstrap org (first run only) ───────────────────────────────────────────
 const org = db.prepare('SELECT id FROM organizations WHERE id = ?').get(ORG_ID);

@@ -13,15 +13,11 @@ const SECTIONS = [
   { key: 'security',     label: 'Security',     icon: Shield },
 ];
 
-const MEMBERS = [
-  { name: 'Alex Chen',     email: 'alex@nuvia.io',   role: 'Owner',   avatar: 'AC' },
-  { name: 'Sarah Park',    email: 'sarah@nuvia.io',  role: 'Admin',   avatar: 'SP' },
-  { name: 'Marcus Oliveira',email: 'marcus@nuvia.io', role: 'Finance', avatar: 'MO' },
-];
+const MEMBERS: { name: string; email: string; role: string; avatar: string }[] = [];
 
 export default function Settings() {
   const [section, setSection] = useState('organization');
-  const [orgName, setOrgName] = useState('NUVIA Demo Org');
+  const [orgName, setOrgName] = useState('');
   const [saving, setSaving] = useState(false);
 
   async function handleSave() {
@@ -69,7 +65,7 @@ export default function Settings() {
               <h3 className="display text-base font-semibold text-[var(--ink)] mb-5">Organization</h3>
               <div className="space-y-4 max-w-md">
                 <Input label="Organization name" value={orgName} onChange={e => setOrgName(e.target.value)} />
-                <Input label="Plan" value="Demo" disabled />
+                <Input label="Plan" value="Starter" disabled />
                 <Input label="Network" value="Arc" disabled />
                 <Button loading={saving} onClick={() => void handleSave()}>Save changes</Button>
               </div>
@@ -82,22 +78,30 @@ export default function Settings() {
                 <h3 className="display text-base font-semibold text-[var(--ink)]">Team members</h3>
                 <Button size="sm" onClick={() => toast.info('Invitations coming in v2')}>Invite member</Button>
               </div>
-              <div className="space-y-3">
-                {MEMBERS.map(m => (
-                  <div key={m.email} className="flex items-center gap-3 p-4 rounded-xl border border-[var(--border)] hover:bg-[var(--surface-muted)] transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
-                      <span className="display text-xs font-bold text-[var(--accent)]">{m.avatar}</span>
+              {MEMBERS.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center border border-dashed border-[var(--border)] rounded-xl">
+                  <Users size={24} className="text-[var(--subtle)] mb-3" />
+                  <p className="text-sm text-[var(--muted)]">No team members yet</p>
+                  <p className="text-xs text-[var(--subtle)] mt-1">Invite your team to collaborate</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {MEMBERS.map(m => (
+                    <div key={m.email} className="flex items-center gap-3 p-4 rounded-xl border border-[var(--border)] hover:bg-[var(--surface-muted)] transition-colors">
+                      <div className="w-9 h-9 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
+                        <span className="display text-xs font-bold text-[var(--accent)]">{m.avatar}</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-[var(--ink)]">{m.name}</p>
+                        <p className="text-xs text-[var(--subtle)]">{m.email}</p>
+                      </div>
+                      <span className="text-xs font-medium text-[var(--muted)] bg-[var(--surface-muted)] px-2 py-1 rounded-lg border border-[var(--border)]">
+                        {m.role}
+                      </span>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-[var(--ink)]">{m.name}</p>
-                      <p className="text-xs text-[var(--subtle)]">{m.email}</p>
-                    </div>
-                    <span className="text-xs font-medium text-[var(--muted)] bg-[var(--surface-muted)] px-2 py-1 rounded-lg border border-[var(--border)]">
-                      {m.role}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
               <p className="text-xs text-[var(--subtle)] mt-4">
                 Roles: Owner (full access) · Admin (all except billing) · Finance (payments + beneficiaries) · Viewer (read-only)
               </p>
@@ -107,12 +111,10 @@ export default function Settings() {
           {section === 'api' && (
             <div>
               <h3 className="display text-base font-semibold text-[var(--ink)] mb-5">API keys</h3>
-              <div className="p-4 rounded-xl bg-[var(--surface-muted)] border border-[var(--border)] mb-5">
-                <p className="text-xs text-[var(--muted)] label-caps mb-2">Demo API key</p>
-                <div className="mono text-xs text-[var(--ink)] bg-[var(--surface)] px-3 py-2 rounded-lg border border-[var(--border)]">
-                  nuvia_demo_key_••••••••••••••••
-                </div>
-                <p className="text-xs text-[var(--subtle)] mt-2">Keys are masked. Contact your admin to rotate.</p>
+              <div className="flex flex-col items-center justify-center py-10 text-center border border-dashed border-[var(--border)] rounded-xl mb-5">
+                <Key size={24} className="text-[var(--subtle)] mb-3" />
+                <p className="text-sm text-[var(--muted)]">No API keys yet</p>
+                <p className="text-xs text-[var(--subtle)] mt-1">Generate a key to access the Nuvia API</p>
               </div>
               <Button size="sm" onClick={() => toast.info('Key management coming in v2')}>Generate new key</Button>
             </div>

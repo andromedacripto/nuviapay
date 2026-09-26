@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   Wallet as WalletIcon, Copy, Check, ArrowDownLeft,
-  ArrowUpRight, RefreshCw, ExternalLink, Info, Droplets,
+  ArrowUpRight, RefreshCw, ExternalLink, Info,
 } from 'lucide-react';
 import { useAccount, useBalance, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
 import { Button } from '@/components/ui/Button.tsx';
@@ -220,44 +220,7 @@ export default function WalletPage() {
         </div>
       </div>
 
-      {/* Arc Faucet */}
-      <div className="rounded-2xl border border-[var(--accent)]/20 bg-[var(--accent)]/4 p-5">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
-            <Droplets size={18} className="text-[var(--accent)]" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-[var(--ink)]">Get USDC</p>
-            <p className="text-xs text-[var(--muted)] mt-0.5">
-              Need USDC? Use the Circle faucet or buy via your wallet provider.
-            </p>
-            <div className="flex flex-wrap gap-2 mt-3">
-              <a
-                href="https://faucet.circle.com"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent)] text-white text-xs font-semibold hover:opacity-90 transition-opacity"
-              >
-                <Droplets size={12} />
-                Circle Faucet
-                <ExternalLink size={10} />
-              </a>
-              {displayAddress && (
-                <button
-                  onClick={() => void copy(displayAddress)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--ink)] hover:bg-[var(--surface-muted)] transition-colors"
-                >
-                  {copied ? <Check size={11} className="text-[var(--success)]" /> : <Copy size={11} />}
-                  Copy my address
-                </button>
-              )}
-            </div>
-            <p className="text-[10px] text-[var(--subtle)] mt-2">
-              Select "Arc" and paste your wallet address.
-            </p>
-          </div>
-        </div>
-      </div>
+
 
       {/* Recent transactions */}
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">

@@ -47,13 +47,14 @@ export function MoonPayModal({ walletAddress, onClose }: Props) {
           params.currencyCode  = 'usdc';
         }
 
-        const query = '?' + Object.entries(params)
-          .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
-          .join('&');
-
+        // Build URL with properly encoded values for the iframe
+        const searchParams = new URLSearchParams(params);
+        const query = '?' + searchParams.toString();
         let url = base + query;
 
-        // Sign the URL server-side if walletAddress is present
+        // Sign the URL server-side if walletAddress is present.
+        // The backend signs the query string (including '?') and returns
+        // the raw base64 signature. We URL-encode it before appending.
         if (walletAddress) {
           const signRes = await fetch('/v1/onramp/sign-url', {
             method: 'POST',

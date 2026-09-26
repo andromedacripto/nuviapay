@@ -3,7 +3,7 @@ import {
   Wallet as WalletIcon, Copy, Check, ArrowDownLeft,
   ArrowUpRight, RefreshCw, ExternalLink, Info, ShoppingCart,
 } from 'lucide-react';
-import { TransakModal } from '@/components/onramp/TransakModal';
+import { MoonPayModal } from '@/components/onramp/MoonPayModal';
 import { useAccount, useBalance, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
 import { Button } from '@/components/ui/Button.tsx';
 import { Input } from '@/components/ui/Input.tsx';
@@ -344,9 +344,9 @@ export default function WalletPage() {
         </div>
       </Modal>
 
-      {/* Buy USDC — Transak onramp */}
+      {/* Buy USDC — MoonPay onramp */}
       {showBuy && (
-        <TransakModal
+        <MoonPayModal
           walletAddress={displayAddress ?? undefined}
           onClose={() => setShowBuy(false)}
           onSuccess={() => { void load(); void refetchBalance(); }}

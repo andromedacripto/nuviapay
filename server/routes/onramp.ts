@@ -1,70 +1,63 @@
-/**
- * Nuvia — Onramp routes
- * POST /v1/onramp/session  — creates a Transak widgetUrl via their API
- */
 import { Router } from 'express';
-import type { Request, Response } from 'express';
+import crypto from 'crypto';
 
 const router = Router();
 
-const TRANSAK_API_KEY     = process.env.TRANSAK_API_KEY ?? '';
-const TRANSAK_ACCESS_TOKEN = process.env.TRANSAK_ACCESS_TOKEN ?? '';
-const TRANSAK_ENV         = process.env.TRANSAK_ENV ?? 'STAGING'; // STAGING | PRODUCTION
-const REFERRER_DOMAIN     = process.env.NUVIA_DOMAIN ?? 'nuviapay-production.up.railway.app';
+// POST /v1/onramp/moonpay-url
+// Builds and signs a MoonPay buy widget URL and returns it to the frontend.
+router.post('/moonpay-url', (req, res) => {
+  const publishableKey = process.env.MOONPAY_PUBLISHABLE_KEY;
+  const secretKey      = process.env.MOONPAY_SECRET_KEY;
+  const env            = process.env.MOONPAY_ENV ?? 'sandbox'; // 'sandbox' | 'production'
 
-const TRANSAK_API_BASE = TRANSAK_ENV === 'PRODUCTION'
-  ? 'https://api-gateway.transak.com'
-  : 'https://api-gateway-stg.transak.com';
-
-router.post('/session', async (req: Request, res: Response) => {
-  try {
-    const { walletAddress } = req.body as { walletAddress?: string };
-
-    if (!TRANSAK_API_KEY) {
-      // No API key configured — return a sandbox stub so the UI doesn't break
-      return res.status(503).json({
-        error: 'Transak API key not configured',
-        message: 'Add TRANSAK_API_KEY and TRANSAK_ACCESS_TOKEN to your environment variables.',
-      });
-    }
-
-    const widgetParams: Record<string, unknown> = {
-      apiKey:              TRANSAK_API_KEY,
-      referrerDomain:      REFERRER_DOMAIN,
-      productsAvailed:     'BUY',
-      cryptoCurrencyCode:  'USDC',
-      network:             'arc',          // Arc mainnet
-      fiatCurrency:        'BRL',          // Default to BRL for Brazil
-      defaultFiatAmount:   100,
-      themeColor:          '1d4ed8',       // Nuvia accent blue
-      ...(walletAddress && {
-        walletAddress,
-        disableWalletAddressForm: true,
-      }),
-    };
-
-    const response = await fetch(`${TRANSAK_API_BASE}/api/v2/auth/session`, {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'accept':        'application/json',
-        'access-token':  TRANSAK_ACCESS_TOKEN,
-      },
-      body: JSON.stringify({ widgetParams }),
+  if (!publishableKey || !secretKey) {
+    res.status(503).json({
+      error: 'MoonPay is not configured. Add MOONPAY_PUBLISHABLE_KEY and MOONPAY_SECRET_KEY to environment variables.',
     });
-
-    if (!response.ok) {
-      const text = await response.text();
-      console.error('[Transak] session error:', response.status, text);
-      return res.status(502).json({ error: 'Transak session creation failed', detail: text });
-    }
-
-    const json = await response.json() as { data: { widgetUrl: string } };
-    return res.json({ data: { widgetUrl: json.data.widgetUrl } });
-  } catch (err) {
-    console.error('[Transak] unexpected error:', err);
-    return res.status(500).json({ error: 'Internal server error' });
+    return;
   }
+
+  const { walletAddress } = req.body as { walletAddress?: string };
+
+  const baseUrl = env === 'production'
+    ? 'https://buy.moonpay.com'
+    : 'https://buy-sandbox.moonpay.com';
+
+  // Build query params — all values must be URL-encoded before signing.
+  const params: Record<string, string> = {
+    apiKey:              publishableKey,
+    currencyCode:        'usdc_arc', // USDC on Arc — matches MoonPay's currency code for USDC on Arc network
+    defaultCurrencyCode: 'usdc',
+    baseCurrencyCode:    'usd',
+    baseCurrencyAmount:  '100',
+    colorCode:           encodeURIComponent('#1d4ed8'), // Nuvia brand blue
+    theme:               'light',
+  };
+
+  // Only pre-fill wallet address if provided — requires signing.
+  if (walletAddress) {
+    params.walletAddress = walletAddress;
+  }
+
+  // Build query string with encoded values.
+  const query = '?' + Object.entries(params)
+    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+    .join('&');
+
+  let url = baseUrl + query;
+
+  // Sign the URL if walletAddress is included (required by MoonPay).
+  if (walletAddress) {
+    // Sign just the query string (including leading '?'), as per MoonPay docs.
+    const signature = crypto
+      .createHmac('sha256', secretKey)
+      .update(query)
+      .digest('base64');
+
+    url += `&signature=${encodeURIComponent(signature)}`;
+  }
+
+  res.json({ url });
 });
 
 export default router;

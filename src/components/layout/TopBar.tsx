@@ -88,7 +88,7 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
       {/* Right: language + dark mode + wallet */}
       <div className="flex items-center gap-2 shrink-0">
         {/* Language switcher */}
-        <div className="hidden sm:flex items-center gap-0.5 bg-[var(--surface-muted)] rounded-xl p-0.5">
+        <div className="flex items-center gap-0.5 bg-[var(--surface-muted)] rounded-xl p-0.5">
           {langs.map(l => (
             <button
               key={l.code}

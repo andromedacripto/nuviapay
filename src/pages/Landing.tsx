@@ -52,7 +52,7 @@ export default function Landing() {
             onClick={() => { void navigate('/dashboard'); }}
             rightIcon={<ArrowRight size={16} />}
           >
-            Start building
+            Start paying
           </Button>
           <Button
             size="lg"
@@ -140,13 +140,12 @@ export default function Landing() {
           </div>
           <div>
             <h3 className="display text-sm font-semibold text-[var(--ink)] mb-2">
-              Fiat on/off-ramps · Roadmap
+              Fiat corridors · Coming soon
             </h3>
             <p className="text-xs text-[var(--muted)] text-pretty leading-relaxed">
-              The Nuvia MVP settles natively in USDC on Arc Testnet. Fiat conversion (BRL, EUR, USD
-              → USDC → Arc → USDC → fiat) is architected via a <code className="mono px-1 py-0.5 rounded bg-[var(--surface)] text-[var(--ink-2)]">FiatProvider</code> abstraction
-              and will be available when fiat rail partners are integrated. No fiat conversion
-              exists in the current version.
+              Nuvia settles payments natively in USDC on Arc. Local currency corridors (BRL, EUR, USD)
+              with fiat on/off-ramp support are on the roadmap and will be available when
+              our banking partners are integrated.
             </p>
           </div>
         </div>
@@ -155,10 +154,10 @@ export default function Landing() {
       {/* CTA */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-20 sm:pb-24 text-center">
         <h2 className="display text-3xl font-bold text-[var(--ink)] tracking-tight mb-3">
-          Ready to build?
+          Ready to pay?
         </h2>
         <p className="text-[var(--muted)] mb-8">
-          Launch the demo dashboard. Connect a wallet. Send a payment in seconds.
+          Connect a wallet. Send a payment. Settle in seconds.
         </p>
         <Button size="lg" onClick={() => { void navigate('/dashboard'); }} rightIcon={<ArrowRight size={16} />}>
           Open dashboard

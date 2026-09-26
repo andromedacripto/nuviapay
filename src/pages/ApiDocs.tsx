@@ -225,7 +225,7 @@ export default function ApiDocsPage() {
             <p className="text-sm font-semibold text-[var(--ink)] mb-1">Authentication</p>
             <p className="text-sm text-[var(--muted)] text-pretty">
               In production, all API endpoints require a Bearer token in the Authorization header.
-              In this demo, all requests are pre-authorized as the demo organization (owner role).
+              All requests are pre-authorized as your organization (owner role).
               Roles supported: <code className="mono bg-[var(--surface-muted)] px-1 py-0.5 rounded text-xs">owner</code>,{' '}
               <code className="mono bg-[var(--surface-muted)] px-1 py-0.5 rounded text-xs">admin</code>,{' '}
               <code className="mono bg-[var(--surface-muted)] px-1 py-0.5 rounded text-xs">finance</code>,{' '}

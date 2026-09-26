@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, ArrowUpDown, Users, Wallet, Activity,
-  Code2, Settings, Zap, ChevronDown, X,
+  Code2, Settings, ChevronDown, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -28,9 +28,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
     <div className="flex flex-col h-full">
       {/* Brand */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-[var(--border)]">
-        <div className="w-8 h-8 rounded-xl bg-[var(--accent)] flex items-center justify-center shrink-0">
-          <Zap size={14} fill="white" className="text-white" />
-        </div>
+        <img
+          src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000000048820e9552aec3f56c2d4f_jxo9pl.png"
+          alt="Nuvia"
+          className="h-8 w-auto object-contain shrink-0"
+        />
         <div className="flex-1">
           <p className="display text-sm font-bold text-[var(--ink)] tracking-tight">NUVIA</p>
           <p className="text-[10px] text-[var(--subtle)]">Payments</p>

@@ -11,9 +11,11 @@ export default function Landing() {
       <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--surface-strong)]/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[var(--accent)] flex items-center justify-center">
-              <Zap size={12} fill="white" className="text-white" />
-            </div>
+            <img
+              src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000000048820e9552aec3f56c2d4f_jxo9pl.png"
+              alt="Nuvia"
+              className="h-7 w-auto object-contain"
+            />
             <span className="display text-sm font-bold text-[var(--ink)] tracking-tight">NUVIA</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">

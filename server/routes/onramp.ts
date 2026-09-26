@@ -1,63 +1,55 @@
 import { Router } from 'express';
-import crypto from 'crypto';
+import crypto    from 'crypto';
 
 const router = Router();
 
-// POST /v1/onramp/moonpay-url
-// Builds and signs a MoonPay buy widget URL and returns it to the frontend.
-router.post('/moonpay-url', (req, res) => {
+/**
+ * GET /v1/onramp/config
+ * Returns the MoonPay publishable key and environment to the frontend.
+ * The secret key is never sent to the client.
+ */
+router.get('/config', (_req, res) => {
   const publishableKey = process.env.MOONPAY_PUBLISHABLE_KEY;
-  const secretKey      = process.env.MOONPAY_SECRET_KEY;
-  const env            = process.env.MOONPAY_ENV ?? 'sandbox'; // 'sandbox' | 'production'
+  const env            = (process.env.MOONPAY_ENV ?? 'sandbox') as 'sandbox' | 'production';
 
-  if (!publishableKey || !secretKey) {
-    res.status(503).json({
-      error: 'MoonPay is not configured. Add MOONPAY_PUBLISHABLE_KEY and MOONPAY_SECRET_KEY to environment variables.',
-    });
+  if (!publishableKey) {
+    res.status(503).json({ error: 'MoonPay is not configured.' });
     return;
   }
 
-  const { walletAddress } = req.body as { walletAddress?: string };
+  res.json({ apiKey: publishableKey, env });
+});
 
-  const baseUrl = env === 'production'
-    ? 'https://buy.moonpay.com'
-    : 'https://buy-sandbox.moonpay.com';
+/**
+ * POST /v1/onramp/sign-url
+ * Receives the unsigned widget URL from the frontend SDK,
+ * signs it with the MoonPay secret key, and returns the signature.
+ * The frontend SDK calls updateSignature(sig) and shows the widget.
+ */
+router.post('/sign-url', (req, res) => {
+  const secretKey = process.env.MOONPAY_SECRET_KEY;
 
-  // Build query params — all values must be URL-encoded before signing.
-  const params: Record<string, string> = {
-    apiKey:              publishableKey,
-    currencyCode:        'usdc_arc', // USDC on Arc — matches MoonPay's currency code for USDC on Arc network
-    defaultCurrencyCode: 'usdc',
-    baseCurrencyCode:    'usd',
-    baseCurrencyAmount:  '100',
-    colorCode:           encodeURIComponent('#1d4ed8'), // Nuvia brand blue
-    theme:               'light',
-  };
-
-  // Only pre-fill wallet address if provided — requires signing.
-  if (walletAddress) {
-    params.walletAddress = walletAddress;
+  if (!secretKey) {
+    res.status(503).json({ error: 'MoonPay secret key not configured.' });
+    return;
   }
 
-  // Build query string with encoded values.
-  const query = '?' + Object.entries(params)
-    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
-    .join('&');
-
-  let url = baseUrl + query;
-
-  // Sign the URL if walletAddress is included (required by MoonPay).
-  if (walletAddress) {
-    // Sign just the query string (including leading '?'), as per MoonPay docs.
-    const signature = crypto
-      .createHmac('sha256', secretKey)
-      .update(query)
-      .digest('base64');
-
-    url += `&signature=${encodeURIComponent(signature)}`;
+  const { url } = req.body as { url?: string };
+  if (!url) {
+    res.status(400).json({ error: 'url is required' });
+    return;
   }
 
-  res.json({ url });
+  // MoonPay requires signing the query string (including leading '?')
+  // with HMAC-SHA256 and returning the base64 signature (NOT URL-encoded —
+  // the SDK handles encoding before appending to the URL).
+  const queryString = new URL(url).search; // includes leading '?'
+  const signature   = crypto
+    .createHmac('sha256', secretKey)
+    .update(queryString)
+    .digest('base64');
+
+  res.json({ signature });
 });
 
 export default router;

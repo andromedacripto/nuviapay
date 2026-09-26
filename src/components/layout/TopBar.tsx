@@ -8,6 +8,7 @@ import { formatAddress } from '@/lib/utils.ts';
 import { getUsdc } from '@/onchain-facts.ts';
 import { formatAmount, Amount } from '@/onchain-money.ts';
 import { arcTestnet } from '@/config.ts';
+import { useTranslation } from 'react-i18next';
 
 interface TopBarProps {
   onMenuOpen?: () => void;
@@ -15,6 +16,12 @@ interface TopBarProps {
 
 export function TopBar({ onMenuOpen }: TopBarProps) {
   const { dark, toggle: toggleDark } = useDarkMode();
+  const { i18n } = useTranslation();
+  const langs = [
+    { code: 'en', label: 'EN' },
+    { code: 'pt', label: 'PT' },
+    { code: 'es', label: 'ES' },
+  ];
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
@@ -78,8 +85,24 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
         )}
       </div>
 
-      {/* Right: dark mode + wallet */}
+      {/* Right: language + dark mode + wallet */}
       <div className="flex items-center gap-2 shrink-0">
+        {/* Language switcher */}
+        <div className="hidden sm:flex items-center gap-0.5 bg-[var(--surface-muted)] rounded-xl p-0.5">
+          {langs.map(l => (
+            <button
+              key={l.code}
+              onClick={() => void i18n.changeLanguage(l.code)}
+              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-colors ${
+                i18n.resolvedLanguage === l.code
+                  ? 'bg-[var(--surface)] text-[var(--ink)] shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--ink)]'
+              }`}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
         <button
           onClick={toggleDark}
           className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[var(--surface-muted)] transition-colors text-[var(--muted)]"

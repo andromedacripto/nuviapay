@@ -107,7 +107,7 @@ paymentsRouter.post(
     try {
       const tx = createTransaction(req.auth!, payment.id, body);
       // Auto-advance to submitted
-      try { transitionPayment(req.auth!, payment.id, 'submitted'); } catch (_) { /* already at target */ }
+      try { transitionPayment(req.auth!, payment.id, 'submitted'); } catch { /* already at target */ }
       res.status(201).json({ data: tx });
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Failed to record transaction';

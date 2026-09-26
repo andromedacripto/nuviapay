@@ -205,7 +205,7 @@ export default function CreatePaymentModal({ open, onClose, onSuccess }: Props) 
             name: form.beneficiaryName, company: form.company || undefined,
             wallet_address: form.walletAddress, country: form.country,
           });
-        } catch (_) {}
+        } catch { /* ignore */ }
       }
 
       addTimeline('Submitting to Arc network…');

@@ -67,6 +67,9 @@ export function MoonPayModal({ walletAddress, onClose }: Props) {
           }
         }
 
+        // Open in new tab — avoids iframe domain restrictions during KYB review
+        window.open(url, '_blank', 'noopener,noreferrer');
+        onClose();
         setIframeUrl(url);
       } catch {
         setError('Failed to load MoonPay configuration.');

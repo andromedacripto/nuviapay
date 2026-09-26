@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   Wallet as WalletIcon, Copy, Check, ArrowDownLeft,
-  ArrowUpRight, RefreshCw, ExternalLink, Info,
+  ArrowUpRight, RefreshCw, ExternalLink, Info, ShoppingCart,
 } from 'lucide-react';
+import { TransakModal } from '@/components/onramp/TransakModal';
 import { useAccount, useBalance, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
 import { Button } from '@/components/ui/Button.tsx';
 import { Input } from '@/components/ui/Input.tsx';
@@ -48,6 +49,7 @@ export default function WalletPage() {
   const [loading,     setLoading]     = useState(true);
   const [showReceive, setShowReceive] = useState(false);
   const [showSend,    setShowSend]    = useState(false);
+  const [showBuy,     setShowBuy]     = useState(false);
   const [sendTo,      setSendTo]      = useState('');
   const [sendAmount,  setSendAmount]  = useState('');
   const [sendErrors,  setSendErrors]  = useState<Record<string, string>>({});
@@ -209,12 +211,15 @@ export default function WalletPage() {
             <p className="text-[10px] text-[var(--subtle)] mt-1">Arc · USDC</p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button size="sm" variant="secondary" leftIcon={<ArrowDownLeft size={12} />} onClick={() => setShowReceive(true)}>
               Receive
             </Button>
             <Button size="sm" leftIcon={<ArrowUpRight size={12} />} onClick={() => setShowSend(true)} disabled={!isConnected}>
               Send
+            </Button>
+            <Button size="sm" variant="secondary" leftIcon={<ShoppingCart size={12} />} onClick={() => setShowBuy(true)}>
+              Buy USDC
             </Button>
           </div>
         </div>
@@ -338,6 +343,15 @@ export default function WalletPage() {
           </div>
         </div>
       </Modal>
+
+      {/* Buy USDC — Transak onramp */}
+      {showBuy && (
+        <TransakModal
+          walletAddress={displayAddress ?? undefined}
+          onClose={() => setShowBuy(false)}
+          onSuccess={() => { void load(); void refetchBalance(); }}
+        />
+      )}
     </div>
   );
 }

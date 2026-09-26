@@ -27,6 +27,7 @@ import { beneficiariesRouter } from './routes/beneficiaries.js';
 import { walletRouter }        from './routes/wallet.js';
 import { activityRouter }      from './routes/activity.js';
 import { webhooksRouter }      from './routes/webhooks.js';
+import onrampRouter            from './routes/onramp.js';
 
 const app  = express();
 const PORT = parseInt(process.env.PORT ?? '3001', 10);
@@ -61,6 +62,7 @@ app.use('/v1/beneficiaries', beneficiariesRouter);
 app.use('/v1/wallet',        walletRouter);
 app.use('/v1/activity',      activityRouter);
 app.use('/v1/webhooks',      webhooksRouter);
+app.use('/v1/onramp',        onrampRouter);
 
 // ── Health (unauthenticated, no sensitive info) ──────────────────────────────
 app.get('/health', (_req, res) => {

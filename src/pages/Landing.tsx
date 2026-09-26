@@ -168,16 +168,18 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
         <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-[var(--accent)] flex items-center justify-center">
-              <Zap size={10} fill="white" className="text-white" />
-            </div>
+          <div className="flex items-center gap-2.5">
+            <img
+              src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000002df8820ea1d92b781d342f06_hk2pak.png"
+              alt="Nuvia"
+              className="h-6 w-auto object-contain"
+            />
             <span className="display text-xs font-bold text-[var(--ink)]">NUVIA</span>
             <span className="text-xs text-[var(--subtle)]">— Global payments. One intelligent rail.</span>
           </div>
           <div className="flex items-center gap-1 text-xs text-[var(--subtle)]">
             <CheckCircle2 size={12} className="text-[var(--success)]" />
-            <span>Demo / Testnet · Not for production use</span>
+            <span>© 2026 Nuvia · Powered by USDC on Arc</span>
           </div>
         </div>
       </footer>

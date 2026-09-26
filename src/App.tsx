@@ -8,6 +8,7 @@ import WalletPage from '@/pages/Wallet';
 import ActivityPage from '@/pages/Activity';
 import ApiDocsPage from '@/pages/ApiDocs';
 import Settings from '@/pages/Settings';
+import PaymentKeys from '@/pages/PaymentKeys';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/payments" element={<Payments />} />
           <Route path="/beneficiaries" element={<BeneficiariesPage />} />
           <Route path="/wallet" element={<WalletPage />} />
+          <Route path="/keys" element={<PaymentKeys />} />
           <Route path="/activity" element={<ActivityPage />} />
           <Route path="/api-docs" element={<ApiDocsPage />} />
           <Route path="/settings" element={<Settings />} />

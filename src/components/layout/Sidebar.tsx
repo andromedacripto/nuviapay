@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, ArrowUpDown, Users, Wallet, Activity,
-  Code2, Settings, ChevronDown, X,
+  Code2, Settings, ChevronDown, X, Key,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +10,7 @@ const NAV = [
   { to: '/payments',      icon: ArrowUpDown,     label: 'Payments' },
   { to: '/beneficiaries', icon: Users,            label: 'Beneficiaries' },
   { to: '/wallet',        icon: Wallet,           label: 'Wallet' },
+  { to: '/keys',          icon: Key,              label: 'Pay Keys' },
   { to: '/activity',      icon: Activity,         label: 'Activity' },
 ];
 

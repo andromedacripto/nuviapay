@@ -142,6 +142,19 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_audit_org ON audit_logs(org_id, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS payment_keys (
+  id             TEXT PRIMARY KEY,
+  org_id         TEXT NOT NULL REFERENCES organizations(id),
+  key_type       TEXT NOT NULL CHECK(key_type IN ('email','cnpj','cpf','phone','custom')),
+  key_value      TEXT NOT NULL,
+  label          TEXT,
+  wallet_address TEXT NOT NULL,
+  is_active      INTEGER NOT NULL DEFAULT 1,
+  created_at     TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_payment_keys_unique ON payment_keys(key_value) WHERE is_active = 1;
+CREATE INDEX IF NOT EXISTS idx_payment_keys_org ON payment_keys(org_id, created_at DESC);
 `);
 
 // ──────────────────────────────────────────────────────────────────────────────

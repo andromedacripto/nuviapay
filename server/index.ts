@@ -25,6 +25,7 @@ import {
 import { paymentsRouter }      from './routes/payments.js';
 import { beneficiariesRouter } from './routes/beneficiaries.js';
 import { walletRouter }        from './routes/wallet.js';
+import { paymentKeysRouter }   from './routes/payment-keys.js';
 import { activityRouter }      from './routes/activity.js';
 import { webhooksRouter }      from './routes/webhooks.js';
 import onrampRouter            from './routes/onramp.js';
@@ -60,6 +61,7 @@ app.use(noCache);
 app.use('/v1/payments',      paymentsRouter);
 app.use('/v1/beneficiaries', beneficiariesRouter);
 app.use('/v1/wallet',        walletRouter);
+app.use('/v1/keys',          paymentKeysRouter);
 app.use('/v1/activity',      activityRouter);
 app.use('/v1/webhooks',      webhooksRouter);
 app.use('/v1/onramp',        onrampRouter);

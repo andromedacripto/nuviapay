@@ -10,7 +10,8 @@ const router = Router();
  */
 router.get('/config', (_req, res) => {
   const publishableKey = process.env.MOONPAY_PUBLISHABLE_KEY;
-  const env            = (process.env.MOONPAY_ENV ?? 'sandbox') as 'sandbox' | 'production';
+  const rawEnv = (process.env.MOONPAY_ENV ?? '').toLowerCase().trim();
+  const env    = (rawEnv === 'production' ? 'production' : 'sandbox') as 'sandbox' | 'production';
 
   if (!publishableKey) {
     res.status(503).json({ error: 'MoonPay is not configured.' });

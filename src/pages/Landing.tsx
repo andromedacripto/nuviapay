@@ -12,7 +12,7 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img
-              src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000000048820e9552aec3f56c2d4f_jxo9pl.png"
+              src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000002df8820ea1d92b781d342f06_hk2pak.png"
               alt="Nuvia"
               className="h-7 w-auto object-contain"
             />

@@ -29,7 +29,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       {/* Brand */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-[var(--border)]">
         <img
-          src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000000048820e9552aec3f56c2d4f_jxo9pl.png"
+          src="https://res.cloudinary.com/dffq1itle/image/upload/f_auto/q_auto/file_000000002df8820ea1d92b781d342f06_hk2pak.png"
           alt="Nuvia"
           className="h-8 w-auto object-contain shrink-0"
         />

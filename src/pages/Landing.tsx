@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Zap, Globe, Shield, Code2, BarChart3, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const langs = [{ code: 'en', label: 'EN' }, { code: 'pt', label: 'PT' }, { code: 'es', label: 'ES' }];
 
   return (
     <div className="min-h-dvh bg-[var(--bg)] text-[var(--ink)]">
@@ -19,8 +22,22 @@ export default function Landing() {
             <span className="display text-sm font-bold text-[var(--ink)] tracking-tight">NUVIA</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <button className="hidden sm:inline text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors">Docs</button>
-            <button className="hidden sm:inline text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors">Pricing</button>
+            {/* Language switcher */}
+            <div className="flex items-center gap-0.5 bg-[var(--surface-muted)] rounded-xl p-0.5">
+              {langs.map(l => (
+                <button
+                  key={l.code}
+                  onClick={() => void i18n.changeLanguage(l.code)}
+                  className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-colors ${
+                    i18n.resolvedLanguage === l.code
+                      ? 'bg-[var(--surface)] text-[var(--ink)] shadow-sm'
+                      : 'text-[var(--muted)] hover:text-[var(--ink)]'
+                  }`}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
             <Button size="sm" onClick={() => { void navigate('/dashboard'); }}>
               Launch app
             </Button>

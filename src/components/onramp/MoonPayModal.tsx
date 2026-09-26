@@ -29,9 +29,11 @@ export function MoonPayModal({ walletAddress, onClose }: Props) {
         const cfg = await res.json() as Config;
         setConfig(cfg);
 
-        const base = cfg.env === 'production'
-          ? 'https://buy.moonpay.com'
-          : 'https://buy-sandbox.moonpay.com';
+        // Always use sandbox URL when env is sandbox — regardless of any other config
+        const isSandbox = cfg.env !== 'production';
+        const base = isSandbox
+          ? 'https://buy-sandbox.moonpay.com'
+          : 'https://buy.moonpay.com';
 
         // Build params — wallet address requires URL signing
         const params: Record<string, string> = {
@@ -39,8 +41,6 @@ export function MoonPayModal({ walletAddress, onClose }: Props) {
           defaultCurrencyCode: 'usdc',
           baseCurrencyCode:   'usd',
           baseCurrencyAmount: '100',
-          colorCode:          '#1d4ed8',
-          theme:              'light',
         };
         if (walletAddress) {
           params.walletAddress = walletAddress;

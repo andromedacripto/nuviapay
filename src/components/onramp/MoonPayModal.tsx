@@ -1,96 +1,112 @@
 import { useEffect, useState } from 'react';
-import { MoonPayBuyWidget }    from '@moonpay/moonpay-react';
-import { Modal }               from '@/components/ui/Modal.tsx';
-import { X }                   from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 
 interface Props {
   walletAddress?: string;
-  onClose:        () => void;
-  onSuccess?:     () => void;
+  onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export function MoonPayModal({ walletAddress, onClose, onSuccess }: Props) {
-  const [apiKey, setApiKey] = useState<string>('');
-  const [env,    setEnv]    = useState<'sandbox' | 'production'>('sandbox');
-  const [ready,  setReady]  = useState(false);
+interface Config {
+  apiKey: string;
+  env: 'sandbox' | 'production';
+}
+
+export function MoonPayModal({ walletAddress, onClose }: Props) {
+  const [config, setConfig] = useState<Config | null>(null);
   const [error,  setError]  = useState<string | null>(null);
+  const [iframeUrl, setIframeUrl] = useState<string | null>(null);
 
-  // Fetch the publishable key + env from the backend on mount.
   useEffect(() => {
-    const load = async () => {
+    async function load() {
       try {
-        const res  = await fetch('/api/v1/onramp/config');
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json() as { apiKey: string; env: 'sandbox' | 'production' };
-        setApiKey(data.apiKey);
-        setEnv(data.env);
-        setReady(true);
-      } catch {
-        setError('MoonPay is not configured. Add MOONPAY_PUBLISHABLE_KEY and MOONPAY_SECRET_KEY to Railway environment variables.');
-      }
-    };
-    void load();
-  }, []);
+        const res = await fetch('/v1/onramp/config');
+        if (!res.ok) {
+          const d = await res.json() as { error?: string };
+          setError(d.error ?? 'MoonPay not configured.');
+          return;
+        }
+        const cfg = await res.json() as Config;
+        setConfig(cfg);
 
-  // Called by the SDK whenever the URL needs signing.
-  const handleSignUrl = async (url: string): Promise<string> => {
-    const res = await fetch('/api/v1/onramp/sign-url', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ url }),
-    });
-    if (!res.ok) throw new Error('Failed to sign MoonPay URL');
-    const data = await res.json() as { signature: string };
-    return data.signature;
-  };
+        const base = cfg.env === 'production'
+          ? 'https://buy.moonpay.com'
+          : 'https://buy-sandbox.moonpay.com';
+
+        // Build params — wallet address requires URL signing
+        const params: Record<string, string> = {
+          apiKey:             cfg.apiKey,
+          defaultCurrencyCode: 'usdc',
+          baseCurrencyCode:   'usd',
+          baseCurrencyAmount: '100',
+          colorCode:          '#1d4ed8',
+          theme:              'light',
+        };
+        if (walletAddress) {
+          params.walletAddress = walletAddress;
+          params.currencyCode  = 'usdc';
+        }
+
+        const query = '?' + Object.entries(params)
+          .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+          .join('&');
+
+        let url = base + query;
+
+        // Sign the URL server-side if walletAddress is present
+        if (walletAddress) {
+          const signRes = await fetch('/v1/onramp/sign-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url }),
+          });
+          if (signRes.ok) {
+            const { signature } = await signRes.json() as { signature: string };
+            url += `&signature=${encodeURIComponent(signature)}`;
+          }
+        }
+
+        setIframeUrl(url);
+      } catch {
+        setError('Failed to load MoonPay configuration.');
+      }
+    }
+    void load();
+  }, [walletAddress]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Modal panel */}
-      <div className="relative z-10 w-full max-w-sm mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col" style={{ height: '85vh', maxHeight: '680px' }}>
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div>
-            <p className="text-sm font-semibold text-gray-900">Buy USDC</p>
+            <p className="font-semibold text-gray-900">Buy USDC</p>
             <p className="text-xs text-gray-400">Powered by MoonPay</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
             <X size={16} className="text-gray-500" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="h-[560px] flex items-center justify-center">
-          {error ? (
-            <div className="p-6 text-center">
-              <p className="text-sm text-red-600 font-medium mb-1">Not configured</p>
-              <p className="text-xs text-gray-500">{error}</p>
+        <div className="flex-1 relative">
+          {error && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+              <p className="text-red-500 font-semibold mb-2">Not configured</p>
+              <p className="text-sm text-gray-500">{error}</p>
             </div>
-          ) : !ready ? (
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-              <p className="text-xs text-gray-400">Loading...</p>
+          )}
+          {!error && !iframeUrl && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Loader2 size={24} className="animate-spin text-gray-400" />
             </div>
-          ) : (
-            <MoonPayBuyWidget
-              variant="embedded"
-              baseCurrencyCode="usd"
-              baseCurrencyAmount="100"
-              defaultCurrencyCode="usdc"
-              walletAddress={walletAddress}
-              colorCode="#1d4ed8"
-              onUrlSignatureRequested={walletAddress ? handleSignUrl : undefined}
-              onTransactionCompleted={async () => { onSuccess?.(); }}
-              visible
+          )}
+          {iframeUrl && (
+            <iframe
+              src={iframeUrl}
+              allow="accelerometer; autoplay; camera; gyroscope; payment; microphone"
+              className="w-full h-full border-0"
+              title="MoonPay"
             />
           )}
         </div>

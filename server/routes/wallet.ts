@@ -4,9 +4,30 @@
 import { Router } from 'express';
 import { requireAuth, requireRole } from '../middleware.js';
 import { validate, SyncBalanceSchema, SyncAddressSchema } from '../validation.js';
-import { getOrgWallet, syncBalance, updateWalletAddress } from '../services/wallet.service.js';
+import { getOrgWallet, syncBalance, updateWalletAddress, getOrg, updateOrgName } from '../services/wallet.service.js';
 
 export const walletRouter = Router();
+
+// GET /v1/wallet — org + wallet summary (used by Settings)
+walletRouter.get('/', requireAuth, (req, res) => {
+  const org = getOrg(req.auth!.orgId);
+  const wallet = getOrgWallet(req.auth!.orgId);
+  res.json({
+    organization: { id: req.auth!.orgId, name: org?.name ?? '' },
+    wallet: wallet ?? null,
+  });
+});
+
+// PATCH /v1/wallet/org — save org name
+walletRouter.patch('/org', requireAuth, requireRole('owner', 'admin'), (req, res) => {
+  const { name } = req.body as { name?: string };
+  if (!name || typeof name !== 'string' || name.trim().length === 0) {
+    res.status(400).json({ error: 'name is required' });
+    return;
+  }
+  updateOrgName(req.auth!.orgId, name.trim());
+  res.json({ success: true });
+});
 
 // GET /v1/wallet/balance
 walletRouter.get('/balance', requireAuth, (req, res) => {

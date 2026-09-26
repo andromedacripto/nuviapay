@@ -1,6 +1,16 @@
 /** Nuvia — Wallet / balance service */
 import db from '../db.js';
-import type { WalletRow, BalanceRow } from '../types.js';
+import type { WalletRow } from '../types.js';
+
+interface OrgRow { id: string; name: string; }
+
+export function getOrg(orgId: string): OrgRow | undefined {
+  return db.prepare('SELECT id, name FROM organizations WHERE id = ?').get(orgId) as OrgRow | undefined;
+}
+
+export function updateOrgName(orgId: string, name: string): void {
+  db.prepare('UPDATE organizations SET name = ? WHERE id = ?').run(name, orgId);
+}
 
 export function getOrgWallet(orgId: string): (WalletRow & { usdc_balance: string; last_synced_at: string | null }) | undefined {
   return db.prepare(`

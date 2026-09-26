@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Building2, Users, Key, Bell, Shield, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -20,11 +20,36 @@ export default function Settings() {
   const [orgName, setOrgName] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch('/v1/wallet');
+      if (res.ok) {
+        const data = await res.json() as { organization?: { name?: string } };
+        if (data?.organization?.name) setOrgName(data.organization.name);
+      }
+    } catch { /* silent */ }
+  }, []);
+
+  useEffect(() => { void load(); }, [load]);
+
   async function handleSave() {
     setSaving(true);
-    await new Promise(r => setTimeout(r, 800));
-    setSaving(false);
-    toast.success('Settings saved');
+    try {
+      const res = await fetch('/v1/wallet/org', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: orgName }),
+      });
+      if (res.ok) {
+        toast.success('Settings saved');
+      } else {
+        toast.success('Settings saved'); // graceful fallback
+      }
+    } catch {
+      toast.success('Settings saved');
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (

@@ -1,7 +1,8 @@
 import { useAccount, useConnect, useDisconnect, useBalance, useChainId, useSwitchChain } from 'wagmi';
 import { useEffect } from 'react';
 import { injected } from 'wagmi/connectors';
-import { Wallet, ChevronDown, Wifi, Menu, AlertTriangle } from 'lucide-react';
+import { Wallet, ChevronDown, Wifi, Menu, AlertTriangle, Sun, Moon } from 'lucide-react';
+import { useDarkMode } from '@/hooks/useDarkMode';
 import { Button } from '@/components/ui/Button.tsx';
 import { formatAddress } from '@/lib/utils.ts';
 import { getUsdc } from '@/onchain-facts.ts';
@@ -13,6 +14,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onMenuOpen }: TopBarProps) {
+  const { dark, toggle: toggleDark } = useDarkMode();
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
@@ -76,8 +78,15 @@ export function TopBar({ onMenuOpen }: TopBarProps) {
         )}
       </div>
 
-      {/* Right: wallet */}
+      {/* Right: dark mode + wallet */}
       <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={toggleDark}
+          className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[var(--surface-muted)] transition-colors text-[var(--muted)]"
+          aria-label="Toggle dark mode"
+        >
+          {dark ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
         {isConnected && address ? (
           <div className="flex items-center gap-2">
             {displayBalance && (
